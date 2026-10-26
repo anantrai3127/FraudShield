@@ -467,7 +467,7 @@ The raw dataset files are excluded from Git using `.gitignore`.
 Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/FraudShield.git
+git clone https://github.com/anantrai3127/FraudShield.git
 ```
 
 Move into the project directory:
