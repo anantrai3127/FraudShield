@@ -1,8 +1,8 @@
 # 🛡️ FraudShield — AI-Powered Fraud Detection System
 
-FraudShield is an end-to-end machine learning project for detecting potentially fraudulent financial transactions using **XGBoost**.
+**FraudShield** is an end-to-end machine learning project for detecting potentially fraudulent financial transactions using **XGBoost**.
 
-The project combines **machine learning, risk scoring, model explainability, and an interactive Streamlit application** to demonstrate how an AI-based fraud detection system can analyze transactions and highlight suspicious activity.
+The project combines **machine learning, fraud-risk analysis, model explainability, and an interactive Streamlit application** to demonstrate how an AI-based fraud detection system can identify suspicious transaction patterns.
 
 > ⚠️ **Disclaimer:** FraudShield is an educational and portfolio project. It does not connect to real banking or payment networks and should not be used for real financial decisions.
 
@@ -10,42 +10,41 @@ The project combines **machine learning, risk scoring, model explainability, and
 
 ## 🚀 Live Demo
 
-🌐 **Streamlit App:**  
+🌐 **Streamlit Application:**  
 https://fraudshield-4dhscbi9u2uanmbe2cgkvy.streamlit.app/
 
 ---
 
 ## 🎯 Project Objective
 
-The goal of FraudShield is to build a machine learning system that can:
+FraudShield aims to build an ML-based system that can:
 
 - Detect potentially fraudulent transactions
 - Estimate fraud probability
 - Assign a transaction risk level
 - Identify important factors influencing predictions
-- Provide an interactive interface for analyzing transactions
-- Demonstrate model explainability using SHAP
+- Analyze different transaction-risk scenarios
+- Provide interpretable model predictions using SHAP
+- Demonstrate an end-to-end ML deployment workflow
 
 ---
 
 ## 🤖 Machine Learning Model
 
-FraudShield uses **XGBoost** as the primary fraud detection model.
+FraudShield uses **XGBoost** as the primary classification model.
 
 ### Model Performance
 
 | Metric | Score |
 |---|---:|
-| ROC-AUC | **90.3%** |
-| PR-AUC | **58.1%** |
+| **ROC-AUC** | **90.3%** |
+| **PR-AUC** | **58.1%** |
 
-The model is designed to distinguish between legitimate and potentially fraudulent transactions based on transaction-related features.
+The model generates a probability indicating how likely a transaction is to be fraudulent. This probability is then used for risk-oriented analysis within the application.
 
 ---
 
 ## 🔄 Machine Learning Pipeline
-
-The overall workflow is:
 
 ```text
 Raw Transaction Data
@@ -64,7 +63,7 @@ Risk Analysis
         ↓
 SHAP Explainability
         ↓
-Streamlit Dashboard
+Streamlit Application
 ```
 
 ---
@@ -73,37 +72,33 @@ Streamlit Dashboard
 
 ### 1. Transaction Input
 
-The system receives transaction-related information such as financial and behavioral features.
+The system receives transaction-related information containing financial and behavioral signals.
 
 ### 2. Data Processing
 
-The input data is prepared using the same preprocessing approach used during model training.
+Input data is processed using the same general preprocessing approach used during model development.
 
 ### 3. XGBoost Prediction
 
-The trained XGBoost model generates a probability indicating how likely the transaction is to be fraudulent.
+The trained XGBoost classifier generates a probability representing the likelihood that a transaction is fraudulent.
 
 ### 4. Risk Assessment
 
-The predicted probability is converted into an easy-to-understand risk score and risk level.
+The prediction is presented through an easy-to-understand risk-oriented interface.
 
 ### 5. Explainability
 
-SHAP is used to identify which features contributed toward increasing or decreasing the model's fraud prediction.
+**SHAP (SHapley Additive exPlanations)** is used to understand which features contributed toward increasing or decreasing the model's prediction.
 
 ---
 
 # 🚀 Streamlit Application
 
-FraudShield includes an interactive Streamlit application with multiple sections for analyzing and understanding transactions.
+FraudShield provides an interactive Streamlit application with multiple sections.
 
 ## 1. ML Fraud Analysis Dashboard
 
-The dashboard uses the **trained XGBoost model** to estimate fraud probability and provide model-driven risk analysis.
-
-![FraudShield Dashboard](images/dashboard.png)
-
-The dashboard displays:
+The dashboard uses the trained XGBoost model to analyze a transaction and display:
 
 - Fraud probability
 - Risk score
@@ -113,65 +108,75 @@ The dashboard displays:
 - Increased fraud-risk signals
 - Reduced fraud-risk signals
 
+### Dashboard
+
+![FraudShield Dashboard](images/dashboard.png)
+
 ---
 
 ## 2. Transaction Risk Simulator
 
-The simulator allows users to experiment with different transaction scenarios and observe how various risk signals affect the overall risk score.
+The simulator allows users to experiment with different transaction scenarios and observe how different risk signals affect the resulting risk score.
 
-### Low-Risk Transaction
+### Low-Risk Example
 
-![Low-Risk Transaction](images/simulator-low-risk.png)
+![Low Risk Transaction](images/simulator-low-risk.png)
 
-Example result:
+**Example:**
 
-**12.00 / 100 — LOW RISK**
+```text
+12.00 / 100 — LOW RISK
+```
 
-The transaction is classified as suitable for normal processing.
+The transaction is classified as relatively suitable for normal processing.
 
-### High-Risk Transaction
+### High-Risk Example
 
-![High-Risk Transaction](images/simulator-high-risk.png)
+![High Risk Transaction](images/simulator-high-risk.png)
 
-Example result:
+**Example:**
 
-**99.00 / 100 — HIGH RISK**
+```text
+99.00 / 100 — HIGH RISK
+```
 
-The transaction is flagged for investigation because multiple risk signals are present.
+The transaction is flagged for further investigation because multiple risk signals are present.
 
-> **Important:** The Transaction Risk Simulator uses a separate transparent **rule-based risk scoring system** for demonstration purposes. It is not the same system as the XGBoost ML prediction shown in the Dashboard.
+> **Important:** The Transaction Risk Simulator uses a separate transparent rule-based scoring system for demonstration purposes. It is **not the same system as the XGBoost ML prediction** used in the ML Fraud Analysis Dashboard.
 
 ---
 
 ## 3. About FraudShield
 
-The application includes an About section explaining the project objective, machine learning model, performance metrics, and overall pipeline.
+The application includes an About section describing the project objective, machine learning model, performance metrics, and overall workflow.
 
 ![About FraudShield](images/about-model.png)
 
 ---
 
-# 🔍 Model Explainability
+# 🔍 Explainable AI with SHAP
 
-Fraud detection models can be difficult to interpret. FraudShield therefore uses **SHAP (SHapley Additive exPlanations)** to understand model predictions.
+Fraud detection models can be difficult to interpret.
+
+FraudShield uses **SHAP** to understand the reasoning behind model predictions.
 
 SHAP helps answer:
 
 > **Why did the model make this prediction?**
 
-It identifies which features contributed toward increasing or decreasing the predicted fraud probability.
+It identifies features that contributed toward increasing or decreasing the predicted fraud probability.
 
-## SHAP Summary
+### SHAP Summary
 
 ![SHAP Summary](images/shap_summary.png)
 
-The SHAP summary provides a global view of feature importance across the dataset.
+The SHAP summary provides a global view of feature contributions across the dataset.
 
-## Individual Fraud Transaction Explanation
+### Individual Transaction Explanation
 
 ![SHAP Fraud Transaction](images/shap_fraud_transaction.png)
 
-This visualization provides an individual explanation of a fraud-related prediction and shows the features contributing to that specific prediction.
+This visualization provides an explanation for an individual fraud-related prediction and shows which features contributed to that prediction.
 
 ---
 
@@ -181,8 +186,9 @@ This visualization provides an individual explanation of a fraud-related predict
 
 - XGBoost classification model
 - Fraud probability prediction
-- ROC-AUC and PR-AUC evaluation
-- Transaction risk classification
+- ROC-AUC evaluation
+- PR-AUC evaluation
+- Transaction risk analysis
 
 ### 🔍 Explainable AI
 
@@ -194,15 +200,16 @@ This visualization provides an individual explanation of a fraud-related predict
 ### 🎨 Interactive Application
 
 - Streamlit web application
-- ML prediction dashboard
+- ML fraud analysis dashboard
 - Transaction risk simulator
 - Risk score visualization
 - Model information section
 
 ### 🛡️ Risk Analysis
 
-- Low-risk transaction detection
-- High-risk transaction detection
+- Low-risk transaction analysis
+- Medium-risk transaction analysis
+- High-risk transaction analysis
 - Risk score interpretation
 - Transaction investigation recommendations
 
@@ -212,17 +219,17 @@ This visualization provides an individual explanation of a fraud-related predict
 
 | Technology | Purpose |
 |---|---|
-| Python | Programming language |
-| Pandas | Data manipulation |
-| NumPy | Numerical computing |
-| Scikit-learn | Machine learning utilities |
-| XGBoost | Fraud detection model |
-| SHAP | Model explainability |
-| Matplotlib | Data visualization |
-| Seaborn | Statistical visualization |
-| Streamlit | Interactive web application |
-| Joblib | Model serialization |
-| Jupyter Notebook | Model development |
+| **Python** | Programming language |
+| **Pandas** | Data manipulation |
+| **NumPy** | Numerical computing |
+| **Scikit-learn** | Machine learning utilities |
+| **XGBoost** | Fraud detection model |
+| **SHAP** | Model explainability |
+| **Matplotlib** | Data visualization |
+| **Seaborn** | Statistical visualization |
+| **Streamlit** | Interactive web application |
+| **Joblib** | Model serialization |
+| **Jupyter Notebook** | Model development |
 
 ---
 
@@ -258,25 +265,25 @@ FraudShield/
 
 # ⚙️ Installation
 
-Clone the repository:
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/anantrai3127/FraudShield.git
 ```
 
-Move into the project directory:
+### 2. Move into the project directory
 
 ```bash
 cd FraudShield
 ```
 
-Install the required dependencies:
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Run the Streamlit application:
+### 4. Run the Streamlit application
 
 ```bash
 python -m streamlit run app.py
@@ -288,35 +295,33 @@ The application will open in your browser.
 
 # 📈 Model Evaluation
 
-Fraud detection problems are often highly imbalanced, so evaluating the model using only accuracy can be misleading.
+Fraud detection is commonly treated as an **imbalanced classification problem**, where fraudulent transactions represent a much smaller portion of the overall dataset.
 
-FraudShield therefore focuses on metrics such as:
+Because of this, relying only on accuracy can provide a misleading picture of model performance.
 
-### ROC-AUC
+FraudShield therefore focuses on **ROC-AUC** and **PR-AUC**.
 
-Measures how effectively the model distinguishes fraudulent transactions from legitimate transactions across classification thresholds.
+### ROC-AUC — 90.3%
 
-**ROC-AUC: 90.3%**
+ROC-AUC measures how effectively the model distinguishes fraudulent transactions from legitimate transactions across different classification thresholds.
 
-### PR-AUC
+### PR-AUC — 58.1%
 
-Provides a more informative view of performance when the positive fraud class is relatively rare.
-
-**PR-AUC: 58.1%**
+PR-AUC provides a more informative view of performance when the positive fraud class is relatively rare.
 
 ---
 
 # 🔐 Risk Interpretation
 
-The application presents predictions in a simple risk-oriented format.
+The application presents predictions in a simple risk-oriented format:
 
 | Risk Level | Interpretation |
 |---|---|
-| 🟢 LOW RISK | Transaction appears relatively normal |
-| 🟡 MEDIUM RISK | Transaction requires additional attention |
-| 🔴 HIGH RISK | Transaction should be investigated |
+| 🟢 **LOW RISK** | Transaction appears relatively normal |
+| 🟡 **MEDIUM RISK** | Transaction requires additional attention |
+| 🔴 **HIGH RISK** | Transaction should be investigated |
 
-These categories are intended for demonstration and portfolio purposes.
+> These risk categories are intended for demonstration and portfolio purposes.
 
 ---
 
@@ -330,13 +335,14 @@ Through this project, I practiced:
 - Training classification models
 - Using XGBoost
 - Evaluating classification performance
-- Handling fraud detection metrics
+- Working with fraud-detection metrics
+- Understanding imbalanced classification
 - Model explainability with SHAP
 - Saving and loading trained models
-- Building a Streamlit application
-- Creating a professional ML project interface
+- Building Streamlit applications
+- Creating an interactive ML interface
 - Deploying a machine learning application
-- Structuring a GitHub portfolio project
+- Structuring a professional GitHub project
 
 ---
 
@@ -361,17 +367,17 @@ Possible future improvements include:
 
 **Anant Rai**
 
-B.Tech — Computer Science & Engineering (AI/ML)
-
+B.Tech. — Computer Science & Engineering (AI/ML)  
 Guru Gobind Singh Indraprastha University (GGSIPU)
 
-### Connect With Me
+### Connect
 
-- GitHub: https://github.com/anantrai3127
-- LinkedIn: https://www.linkedin.com/in/anant-rai-205362447/
+- 💼 [LinkedIn](https://www.linkedin.com/in/anant-rai-205362447/)
+- 🐙 [GitHub](https://github.com/anantrai3127)
+- 📧 anantbnz3127@gmail.com
 
 ---
 
-# ⭐ Project
+## ⭐ Project
 
-If you found this project useful or interesting, consider giving the repository a ⭐ on GitHub.
+If you found FraudShield interesting, consider giving the repository a ⭐ on GitHub.
