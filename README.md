@@ -1,468 +1,262 @@
-# 🛡️ FraudShield — Transaction Fraud Detection & Risk Analysis System
+# 🛡️ FraudShield — AI-Powered Fraud Detection System
 
-FraudShield is an end-to-end machine learning project for detecting potentially fraudulent transactions and analyzing transaction risk.
+FraudShield is an end-to-end machine learning project for detecting potentially fraudulent financial transactions using **XGBoost**.
 
-The project combines **machine learning, feature engineering, imbalanced classification, threshold analysis, SHAP explainability, and a Streamlit application** into a single fraud-risk analysis system.
+The project combines **machine learning, risk scoring, model explainability, and an interactive Streamlit application** to demonstrate how an AI-based fraud detection system can analyze transactions and highlight suspicious activity.
 
-> **Note:** FraudShield is a portfolio/research prototype. It is not connected to any real bank, payment network, or financial account.
-
----
-
-## 🚀 Project Overview
-
-Financial fraud detection is a highly imbalanced classification problem where fraudulent transactions represent only a small portion of all transactions.
-
-FraudShield explores how machine learning can be used to identify suspicious transactions while also providing explanations for model predictions.
-
-The project contains two complementary application modes:
-
-### 🔬 Research Dashboard
-
-Uses the trained **XGBoost model** with the technical features used during model development.
-
-### 💳 Transaction Simulator
-
-Provides a realistic, human-friendly transaction interface where users can simulate everyday payments and observe how different risk signals affect a transaction's risk score.
-
-The simulator is intentionally rule-based and is **not presented as an XGBoost prediction**.
+> ⚠️ **Disclaimer:** FraudShield is an educational and portfolio project. It does not connect to real banking or payment networks and should not be used for real financial decisions.
 
 ---
 
-## 🎯 Project Objectives
+## 🚀 Live Demo
 
-- Understand transaction fraud data
-- Perform exploratory data analysis
-- Analyze severe class imbalance
-- Engineer useful transaction and device features
-- Build a Logistic Regression baseline
-- Train an XGBoost fraud detection model
-- Compare different modeling approaches
-- Analyze classification thresholds
-- Use SHAP for model explainability
-- Build a transaction risk scoring interface
-- Develop an interactive Streamlit application
-- Package the project as a reproducible ML portfolio project
+🌐 **Streamlit App:**  
+https://fraudshield-4dhscbi9u2uanmbe2cgkvy.streamlit.app/
 
 ---
 
-## 🧠 Machine Learning Workflow
+## 🎯 Project Objective
 
-```text
-IEEE-CIS Fraud Detection Dataset
-                ↓
-        Data Understanding
-                ↓
-     Exploratory Data Analysis
-                ↓
-       Feature Engineering
-                ↓
-        Data Preprocessing
-                ↓
-    Logistic Regression Baseline
-                ↓
-            XGBoost
-                ↓
-    Class Imbalance Analysis
-                ↓
-       Threshold Analysis
-                ↓
-      SHAP Explainability
-                ↓
-       Risk Assessment
-                ↓
-      Streamlit Application
-```
+The goal of FraudShield is to build a machine learning system that can:
+
+- Detect potentially fraudulent transactions
+- Estimate fraud probability
+- Assign a transaction risk level
+- Identify important factors influencing predictions
+- Provide an interactive interface for analyzing transactions
+- Demonstrate model explainability using SHAP
 
 ---
 
-## 📊 Dataset
+## 🤖 Machine Learning Model
 
-FraudShield uses the **IEEE-CIS Fraud Detection** dataset.
+FraudShield uses **XGBoost** as the primary fraud detection model.
 
-The original competition data contains transaction-level information together with identity-related information.
-
-The project uses:
-
-- `train_transaction.csv`
-- `train_identity.csv`
-
-The original transaction dataset contains hundreds of technical and anonymized features.
-
-For this project, a smaller feature set was selected for the initial modeling pipeline rather than blindly using every available column.
-
-### Important Dataset Note
-
-The model development in this project uses a **50,000-row development subset** of the transaction data.
-
-The raw dataset files are **not included in this GitHub repository** because of their size and dataset/distribution considerations.
-
----
-
-## ⚙️ Feature Engineering
-
-Several useful features were derived from the original transaction signals.
-
-### Time Features
-
-`TransactionDT` was transformed into:
-
-- `day_index`
-- `hour`
-- `minute`
-
-This allows the model to capture temporal patterns.
-
-### Identity Availability
-
-A binary feature called:
-
-```text
-has_identity
-```
-
-was created to indicate whether identity information was available for a transaction.
-
-### Device Features
-
-The original device information was supplemented with a simplified:
-
-```text
-device_family
-```
-
-feature.
-
-Examples include:
-
-- Windows
-- iOS
-- Mac
-- Android
-- Samsung
-- Trident
-- Chrome
-- Firefox
-- Other
-
----
-
-## 🧩 Model Features
-
-The final modeling pipeline uses 21 selected features.
-
-### Numerical Features
-
-```text
-TransactionDT
-TransactionAmt
-card1
-card2
-card3
-card5
-addr1
-addr2
-dist1
-dist2
-day_index
-hour
-minute
-has_identity
-```
-
-### Categorical Features
-
-```text
-ProductCD
-card4
-card6
-P_emaildomain
-R_emaildomain
-DeviceType
-device_family
-```
-
-Categorical features are handled using one-hot encoding, while numerical features are imputed where necessary.
-
----
-
-## 🤖 Models
-
-### 1. Logistic Regression
-
-Logistic Regression was used as the baseline classification model.
-
-The baseline achieved approximately:
+### Model Performance
 
 | Metric | Score |
 |---|---:|
-| ROC-AUC | 0.770 |
-| PR-AUC | 0.127 |
+| ROC-AUC | **90.3%** |
+| PR-AUC | **58.1%** |
 
-The baseline helped establish a reference point before using a more powerful tree-based model.
-
----
-
-### 2. XGBoost
-
-XGBoost was selected as the main model because tree-based boosting models can capture nonlinear relationships and interactions between transaction features.
-
-The primary XGBoost model achieved:
-
-| Metric | Score |
-|---|---:|
-| ROC-AUC | **0.903** |
-| PR-AUC | **0.581** |
-
-These results were obtained using a 50,000-row development subset and a single stratified 80/20 train-test split.
+The model is designed to distinguish between legitimate and potentially fraudulent transactions based on transaction-related features.
 
 ---
 
-## 📈 Model Comparison
+## 🔄 Machine Learning Pipeline
 
-| Model | ROC-AUC | PR-AUC |
-|---|---:|---:|
-| Logistic Regression | 0.770 | 0.127 |
-| XGBoost | **0.903** | **0.581** |
-| Tuned XGBoost | 0.892 | 0.549 |
-| Imbalance-Aware XGBoost | 0.898 | 0.515 |
+The overall workflow is:
 
-The original XGBoost configuration performed best among the tested configurations on the selected evaluation split.
-
----
-
-## ⚖️ Class Imbalance
-
-Fraud detection is highly imbalanced.
-
-In the 50,000-row development subset, legitimate transactions greatly outnumbered fraudulent transactions.
-
-This means accuracy alone is not an appropriate metric for evaluating the system.
-
-FraudShield therefore focuses on metrics such as:
-
-- ROC-AUC
-- PR-AUC
-- Precision
-- Recall
-- F1-score
-- Confusion Matrix
-
-Threshold analysis was also performed to understand the trade-off between detecting more fraud and generating more false positives.
+```text
+Raw Transaction Data
+        ↓
+Data Preprocessing
+        ↓
+Feature Engineering
+        ↓
+Train / Test Split
+        ↓
+XGBoost Classifier
+        ↓
+Fraud Probability
+        ↓
+Risk Analysis
+        ↓
+SHAP Explainability
+        ↓
+Streamlit Dashboard
+```
 
 ---
 
-## 🎚️ Threshold Analysis
+## 🧠 How FraudShield Works
 
-The default classification threshold is not always the best choice for fraud detection.
+### 1. Transaction Input
 
-For the primary XGBoost model, different thresholds were evaluated.
+The system receives transaction-related information such as financial and behavioral features.
 
-Example:
+### 2. Data Processing
 
-| Threshold | Precision | Recall | F1 |
-|---:|---:|---:|---:|
-| 0.10 | 0.404 | 0.605 | 0.484 |
-| 0.20 | **0.608** | 0.520 | **0.561** |
-| 0.30 | 0.763 | 0.439 | 0.557 |
-| 0.50 | 0.944 | 0.251 | 0.397 |
+The input data is prepared using the same preprocessing approach used during model training.
 
-A threshold around **0.20** produced the highest tested F1-score in this analysis.
+### 3. XGBoost Prediction
 
-This demonstrates an important fraud-detection concept:
+The trained XGBoost model generates a probability indicating how likely the transaction is to be fraudulent.
 
-> Lowering the threshold can increase fraud detection recall, but may also increase false positives.
+### 4. Risk Assessment
 
----
+The predicted probability is converted into an easy-to-understand risk score and risk level.
 
-## 🔎 Explainable AI with SHAP
+### 5. Explainability
 
-FraudShield uses **SHAP (SHapley Additive exPlanations)** to understand the contribution of individual features to model predictions.
-
-This allows the system to move beyond simply saying:
-
-> "This transaction is suspicious."
-
-and instead investigate:
-
-> "Which model signals contributed to this prediction?"
-
-Example SHAP outputs include:
-
-- Global feature importance
-- Individual transaction explanations
-- Positive and negative feature contributions
-
-### SHAP Summary
-
-![SHAP Summary](images/shap_summary.png)
-
-### Fraudulent Transaction Explanation
-
-![SHAP Fraud Transaction](images/shap_fraud_transaction.png)
+SHAP is used to identify which features contributed toward increasing or decreasing the model's fraud prediction.
 
 ---
 
-## 🖥️ Streamlit Application
+# 🚀 Streamlit Application
 
-FraudShield includes an interactive Streamlit application with three main sections.
+FraudShield includes an interactive Streamlit application with multiple sections for analyzing and understanding transactions.
 
-### 🏠 Dashboard
+## 1. ML Fraud Analysis Dashboard
 
-The research dashboard allows users to enter the technical transaction features expected by the trained model.
+The dashboard uses the **trained XGBoost model** to estimate fraud probability and provide model-driven risk analysis.
 
-It provides:
+![FraudShield Dashboard](images/dashboard.png)
+
+The dashboard displays:
 
 - Fraud probability
 - Risk score
 - Risk level
-- Recommendation
-- SHAP explanation
-- Top model signals
+- Prediction result
+- Model explanation
+- Increased fraud-risk signals
+- Reduced fraud-risk signals
 
 ---
 
-### 💳 Transaction Simulator
+## 2. Transaction Risk Simulator
 
-The simulator provides a more realistic everyday transaction interface.
+The simulator allows users to experiment with different transaction scenarios and observe how various risk signals affect the overall risk score.
 
-Users can simulate:
+### Low-Risk Transaction
 
-- Transaction amount
-- Payment method
-- Merchant category
-- Transaction type
-- Location
-- Domestic/international transaction
-- Device
-- New device
-- New merchant
-- Recent transaction frequency
-- Distance from usual location
-- Transaction time
+![Low-Risk Transaction](images/simulator-low-risk.png)
 
-The simulator generates:
+Example result:
 
-- Transaction ID
-- Analysis timestamp
-- Risk score
-- Risk level
-- Processing recommendation
-- Security checks
-- Risk factors
-- Protective signals
-- Transaction summary
+**12.00 / 100 — LOW RISK**
 
-### Important
+The transaction is classified as suitable for normal processing.
 
-The simulator uses a **transparent rule-based risk engine**.
+### High-Risk Transaction
 
-It does **not** use the XGBoost model and does not claim to produce calibrated fraud probabilities.
+![High-Risk Transaction](images/simulator-high-risk.png)
 
-This separation keeps the application realistic while avoiding misleading claims about the anonymized IEEE-CIS features.
+Example result:
+
+**99.00 / 100 — HIGH RISK**
+
+The transaction is flagged for investigation because multiple risk signals are present.
+
+> **Important:** The Transaction Risk Simulator uses a separate transparent **rule-based risk scoring system** for demonstration purposes. It is not the same system as the XGBoost ML prediction shown in the Dashboard.
 
 ---
 
-### 🤖 About Model
+## 3. About FraudShield
 
-The About Model page explains:
+The application includes an About section explaining the project objective, machine learning model, performance metrics, and overall pipeline.
 
-- Project objective
-- Dataset
-- Model performance
-- ML pipeline
-- Feature groups
-- SHAP explainability
-- Risk classification
-- Real-world deployment considerations
+![About FraudShield](images/about-model.png)
 
 ---
 
-## 🚦 Risk Classification
+# 🔍 Model Explainability
 
-The application currently uses the following risk-score categories:
+Fraud detection models can be difficult to interpret. FraudShield therefore uses **SHAP (SHapley Additive exPlanations)** to understand model predictions.
 
-| Risk Score | Risk Level | Recommendation |
-|---:|---|---|
-| `< 30` | 🟢 Low Risk | Normal Processing |
-| `30 – 59.99` | 🟡 Medium Risk | Review Transaction |
-| `≥ 60` | 🔴 High Risk | Investigate Transaction |
+SHAP helps answer:
 
-These thresholds are **application-level heuristics** and are not bank-approved fraud thresholds.
+> **Why did the model make this prediction?**
+
+It identifies which features contributed toward increasing or decreasing the predicted fraud probability.
+
+## SHAP Summary
+
+![SHAP Summary](images/shap_summary.png)
+
+The SHAP summary provides a global view of feature importance across the dataset.
+
+## Individual Fraud Transaction Explanation
+
+![SHAP Fraud Transaction](images/shap_fraud_transaction.png)
+
+This visualization provides an individual explanation of a fraud-related prediction and shows the features contributing to that specific prediction.
 
 ---
 
-## 🏗️ Project Structure
+# 📊 Key Features
+
+### 🤖 Machine Learning
+
+- XGBoost classification model
+- Fraud probability prediction
+- ROC-AUC and PR-AUC evaluation
+- Transaction risk classification
+
+### 🔍 Explainable AI
+
+- SHAP-based model interpretation
+- Global feature importance
+- Individual prediction explanations
+- Increased and reduced risk signals
+
+### 🎨 Interactive Application
+
+- Streamlit web application
+- ML prediction dashboard
+- Transaction risk simulator
+- Risk score visualization
+- Model information section
+
+### 🛡️ Risk Analysis
+
+- Low-risk transaction detection
+- High-risk transaction detection
+- Risk score interpretation
+- Transaction investigation recommendations
+
+---
+
+# 🧰 Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| Python | Programming language |
+| Pandas | Data manipulation |
+| NumPy | Numerical computing |
+| Scikit-learn | Machine learning utilities |
+| XGBoost | Fraud detection model |
+| SHAP | Model explainability |
+| Matplotlib | Data visualization |
+| Seaborn | Statistical visualization |
+| Streamlit | Interactive web application |
+| Joblib | Model serialization |
+| Jupyter Notebook | Model development |
+
+---
+
+# 📁 Project Structure
 
 ```text
 FraudShield/
 │
-├── Data/
-│   └── raw/
-│       ├── train_transaction.csv
-│       └── train_identity.csv
+├── data/
+│   └── ...
 │
 ├── notebooks/
-│   └── 01_Data_Inspection.ipynb
+│   └── ...
 │
 ├── models/
-│   └── fraudshield_xgb_model.pkl
+│   └── ...
 │
 ├── images/
+│   ├── dashboard.png
+│   ├── simulator-low-risk.png
+│   ├── simulator-high-risk.png
+│   ├── about-model.png
 │   ├── shap_summary.png
 │   └── shap_fraud_transaction.png
 │
-├── app/
-│   └── app.py
-│
-├── README.md
+├── app.py
 ├── requirements.txt
+├── README.md
 └── .gitignore
 ```
 
-The raw dataset files are excluded from Git using `.gitignore`.
-
 ---
 
-## 🛠️ Technologies Used
-
-### Programming
-
-- Python
-
-### Machine Learning
-
-- Scikit-learn
-- XGBoost
-
-### Data Processing
-
-- Pandas
-- NumPy
-
-### Explainable AI
-
-- SHAP
-
-### Visualization
-
-- Matplotlib
-
-### Application
-
-- Streamlit
-
-### Model Persistence
-
-- Joblib
-
-### Development
-
-- Jupyter Notebook
-- VS Code
-
----
-
-## ⚙️ Installation
+# ⚙️ Installation
 
 Clone the repository:
 
@@ -476,23 +270,13 @@ Move into the project directory:
 cd FraudShield
 ```
 
-Install the required packages:
+Install the required dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
----
-
-## ▶️ Running the Application
-
-Navigate to the application directory:
-
-```bash
-cd app
-```
-
-Run Streamlit:
+Run the Streamlit application:
 
 ```bash
 python -m streamlit run app.py
@@ -502,132 +286,92 @@ The application will open in your browser.
 
 ---
 
-## 📓 Running the Notebook
+# 📈 Model Evaluation
 
-The main notebook is:
+Fraud detection problems are often highly imbalanced, so evaluating the model using only accuracy can be misleading.
 
-```text
-notebooks/01_Data_Inspection.ipynb
-```
+FraudShield therefore focuses on metrics such as:
 
-The notebook covers:
+### ROC-AUC
 
-- Dataset inspection
-- Missing-value analysis
-- Target distribution
-- Feature exploration
-- Transaction/identity merging
+Measures how effectively the model distinguishes fraudulent transactions from legitimate transactions across classification thresholds.
+
+**ROC-AUC: 90.3%**
+
+### PR-AUC
+
+Provides a more informative view of performance when the positive fraud class is relatively rare.
+
+**PR-AUC: 58.1%**
+
+---
+
+# 🔐 Risk Interpretation
+
+The application presents predictions in a simple risk-oriented format.
+
+| Risk Level | Interpretation |
+|---|---|
+| 🟢 LOW RISK | Transaction appears relatively normal |
+| 🟡 MEDIUM RISK | Transaction requires additional attention |
+| 🔴 HIGH RISK | Transaction should be investigated |
+
+These categories are intended for demonstration and portfolio purposes.
+
+---
+
+# 💡 What I Learned
+
+Through this project, I practiced:
+
+- Building an end-to-end machine learning project
+- Data preprocessing
 - Feature engineering
-- Preprocessing
-- Logistic Regression
-- XGBoost
-- Threshold analysis
-- Feature importance
-- SHAP analysis
-- Model saving
+- Training classification models
+- Using XGBoost
+- Evaluating classification performance
+- Handling fraud detection metrics
+- Model explainability with SHAP
+- Saving and loading trained models
+- Building a Streamlit application
+- Creating a professional ML project interface
+- Deploying a machine learning application
+- Structuring a GitHub portfolio project
 
 ---
 
-## 🔐 Real-World Considerations
-
-A production fraud detection system would require significantly more infrastructure than this portfolio prototype.
-
-A real deployment would require:
-
-- Bank-specific historical transaction data
-- Secure payment infrastructure
-- Model calibration
-- Continuous model monitoring
-- Fraud feedback loops
-- Concept drift detection
-- False-positive monitoring
-- Data-quality monitoring
-- Secure feature pipelines
-- Access control
-- Encryption
-- Audit logging
-- Model retraining
-- Human fraud-review workflows
-
-The anonymized IEEE-CIS features should not be assumed to directly represent real-world banking fields.
-
----
-
-## ⚠️ Limitations
-
-This project has several important limitations:
-
-1. The model was developed using a 50,000-row subset rather than the complete dataset.
-2. Reported metrics come from a single 80/20 stratified evaluation split.
-3. The IEEE-CIS dataset contains anonymized features.
-4. The model is not trained on real bank-specific data.
-5. Application risk thresholds are heuristic.
-6. The Transaction Simulator is rule-based rather than ML-based.
-7. The application is not connected to real financial accounts or payment networks.
-8. The model should not be interpreted as a production-ready banking fraud detector.
-
----
-
-## 🔮 Future Improvements
+# 🔮 Future Improvements
 
 Possible future improvements include:
 
-- Train using a much larger portion of the dataset
-- Time-based validation
-- Cross-validation
-- Probability calibration
+- Hyperparameter optimization
+- Threshold optimization for fraud detection
+- Real-time transaction monitoring
+- Improved handling of class imbalance
 - More advanced feature engineering
-- LightGBM comparison
-- Better fraud threshold optimization
-- Real-time inference API using FastAPI
-- Docker deployment
-- Model monitoring
-- Data drift detection
-- Automated retraining pipeline
-- Production-grade authentication
-- Cloud deployment
-- Human fraud-review workflow
+- Model comparison with LightGBM and CatBoost
+- Real-time SHAP explanations
+- User authentication
+- Transaction history and monitoring dashboard
+- Model monitoring and drift detection
 
 ---
 
-## 📌 Key Learning Outcomes
-
-Through this project, I worked with:
-
-- End-to-end ML project structure
-- Large tabular datasets
-- Data merging
-- Missing-value handling
-- Categorical encoding
-- Feature engineering
-- Imbalanced classification
-- Logistic Regression
-- XGBoost
-- Precision/Recall trade-offs
-- Threshold optimization
-- ROC-AUC and PR-AUC
-- SHAP explainability
-- Model serialization
-- Streamlit application development
-- Risk scoring
-- ML project documentation
-
----
-
-## 👨‍💻 Author
+# 👨‍💻 Author
 
 **Anant Rai**
 
-AI/ML Student
+B.Tech — Computer Science & Engineering (AI/ML)
 
-GGSIPU
+Guru Gobind Singh Indraprastha University (GGSIPU)
+
+### Connect With Me
+
+- GitHub: https://github.com/anantrai3127
+- LinkedIn: https://www.linkedin.com/in/anant-rai-205362447/
 
 ---
 
-## 📄 Disclaimer
+# ⭐ Project
 
-FraudShield is an educational and portfolio project created for machine learning research and demonstration.
-
-It does not process real payments, connect to bank accounts, authorize transactions, or provide financial advice.
-
-The risk scores and recommendations shown by the application should not be used for real financial decisions.
+If you found this project useful or interesting, consider giving the repository a ⭐ on GitHub.
